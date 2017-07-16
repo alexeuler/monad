@@ -1,5 +1,9 @@
-import { Option } from './option';
+import { Future } from './future';
 
-const x = Option.pure(1)
-const y = x.map(x => x + 1)
-console.log(x.toString(), y.toString());
+// const f1 = Future.pure(12)
+// f1.map(console.log)
+
+const future = new Future(cb => setTimeout(() => cb(undefined, 20), 1000))
+// console.log(future)
+future.map(x => x + 5).map(console.log)
+

@@ -8195,13 +8195,20 @@ module.exports = function(regExp, replace){
 "use strict";
 
 
-var _option = __webpack_require__(300);
+var _future = __webpack_require__(302);
 
-var x = _option.Option.pure(1);
-var y = x.map(function (x) {
-  return x + 1;
+// const f1 = Future.pure(12)
+// f1.map(console.log)
+
+var future = new _future.Future(function (cb) {
+  return setTimeout(function () {
+    return cb(undefined, 20);
+  }, 1000);
 });
-console.log(x.toString(), y.toString());
+// console.log(future)
+future.map(function (x) {
+  return x + 5;
+}).map(console.log);
 
 /***/ }),
 /* 299 */
@@ -8265,115 +8272,7 @@ var Monad = function (_Base) {
 exports.default = Monad;
 
 /***/ }),
-/* 300 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Some = exports.none = exports.Option = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _monad = __webpack_require__(299);
-
-var _monad2 = _interopRequireDefault(_monad);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Option = exports.Option = function (_Monad) {
-  _inherits(Option, _Monad);
-
-  function Option() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
-    _classCallCheck(this, Option);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Option.__proto__ || Object.getPrototypeOf(Option)).call.apply(_ref, [this].concat(args))), _this), _this.pure = function (value) {
-      if (value === null || value === undefined) {
-        return none;
-      }
-      return new Some(value);
-    }, _this.flatMap = function (f) {
-      return _this.constructor.name === 'None' ? none : f(_this.value);
-    }, _this.equals = function (x) {
-      return _this.toString() === x.toString();
-    }, _temp), _possibleConstructorReturn(_this, _ret);
-  }
-  // pure :: a -> M a
-
-
-  // flatMap :: # M a -> (a -> M b) -> M b
-
-
-  // equals :: # M a -> M a -> boolean
-
-
-  return Option;
-}(_monad2.default);
-
-var None = function (_Option) {
-  _inherits(None, _Option);
-
-  function None() {
-    _classCallCheck(this, None);
-
-    return _possibleConstructorReturn(this, (None.__proto__ || Object.getPrototypeOf(None)).apply(this, arguments));
-  }
-
-  _createClass(None, [{
-    key: 'toString',
-    value: function toString() {
-      return 'None';
-    }
-  }]);
-
-  return None;
-}(Option);
-// Cached None class value
-
-
-var none = exports.none = new None();
-Option.pure = none.pure;
-
-var Some = exports.Some = function (_Option2) {
-  _inherits(Some, _Option2);
-
-  function Some(value) {
-    _classCallCheck(this, Some);
-
-    var _this3 = _possibleConstructorReturn(this, (Some.__proto__ || Object.getPrototypeOf(Some)).call(this));
-
-    _this3.value = value;
-    return _this3;
-  }
-
-  _createClass(Some, [{
-    key: 'toString',
-    value: function toString() {
-      return 'Some(' + this.value + ')';
-    }
-  }]);
-
-  return Some;
-}(Option);
-
-/***/ }),
+/* 300 */,
 /* 301 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8399,6 +8298,110 @@ var Base = function Base() {
 ;
 
 exports.default = Base;
+
+/***/ }),
+/* 302 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Future = undefined;
+
+var _monad = __webpack_require__(299);
+
+var _monad2 = _interopRequireDefault(_monad);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Future = exports.Future = function (_Monad) {
+  _inherits(Future, _Monad);
+
+  // constructor :: (((err, a) -> void) -> void) -> Future (Either err a)
+  function Future(f) {
+    _classCallCheck(this, Future);
+
+    var _this = _possibleConstructorReturn(this, (Future.__proto__ || Object.getPrototypeOf(Future)).call(this));
+
+    _initialiseProps.call(_this);
+
+    _this.pending = [];
+    _this.resolved = false;
+    _this.err = null;
+    _this.data = null;
+    f(_this.resolve);
+    return _this;
+  }
+
+  // pure :: a -> Future a
+
+
+  // flatMap :: # Future a -> (a -> Future b) -> Future b
+
+
+  return Future;
+}(_monad2.default);
+
+var _initialiseProps = function _initialiseProps() {
+  var _this2 = this;
+
+  this.resolve = function (err, data) {
+    _this2.resolved = true;
+    _this2.err = err;
+    _this2.data = data;
+    _this2.pending.map(function (cb) {
+      return cb(err, data);
+    });
+  };
+
+  this.addCallback = function (callback) {
+    if (_this2.resolved) {
+      callback(_this2.err, _this2.data);
+      return;
+    }
+    _this2.pending.push(callback);
+  };
+
+  this.toPromise = function () {
+    return new Promise(function (resolve, reject) {
+      return _this2.addCallback(resolve);
+    });
+  };
+
+  this.pure = Future.pure;
+
+  this.flatMap = function (f) {
+    return new Future(function (cb) {
+      return _this2.addCallback(function (err, data) {
+        return err ? cb(err, undefined) : f(data).addCallback(cb);
+      });
+    });
+  };
+};
+
+Future.fromNode = function (nodeFunction) {
+  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    args[_key - 1] = arguments[_key];
+  }
+
+  var f = nodeFunction.bind.apply(nodeFunction, [undefined].concat(args));
+  return new Future(f);
+};
+
+Future.pure = function (value) {
+  return new Future(function (cb) {
+    return cb(undefined, value);
+  });
+};
 
 /***/ })
 /******/ ]);

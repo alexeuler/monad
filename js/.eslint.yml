@@ -1,0 +1,14 @@
+---
+  extends: 
+    - "airbnb"
+
+  react/jsx-filename-extension:
+    - 0
+    - extensions: [".js", ".jsx"]
+
+
+  env:
+    browser: true
+
+  globals:
+    __DEV__: true
