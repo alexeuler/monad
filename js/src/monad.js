@@ -1,4 +1,6 @@
-class Monad {
+import Base from './base';
+
+class Monad extends Base {
   // pure :: a -> M a
   pure = () => { throw "pure method needs to be implemented" }
   

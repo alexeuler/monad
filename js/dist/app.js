@@ -8214,35 +8214,53 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _base = __webpack_require__(301);
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Monad = function Monad() {
-  var _this = this;
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-  _classCallCheck(this, Monad);
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-  this.pure = function () {
-    throw "pure method needs to be implemented";
-  };
+var Monad = function (_Base) {
+  _inherits(Monad, _Base);
 
-  this.flatMap = function (x) {
-    throw "flatMap method needs to be implemented";
-  };
+  function Monad() {
+    var _ref;
 
-  this.map = function (f) {
-    return _this.flatMap(function (x) {
-      return new _this.pure(f(x));
-    });
-  };
-}
-// pure :: a -> M a
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, Monad);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Monad.__proto__ || Object.getPrototypeOf(Monad)).call.apply(_ref, [this].concat(args))), _this), _this.pure = function () {
+      throw "pure method needs to be implemented";
+    }, _this.flatMap = function (x) {
+      throw "flatMap method needs to be implemented";
+    }, _this.map = function (f) {
+      return _this.flatMap(function (x) {
+        return new _this.pure(f(x));
+      });
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+  // pure :: a -> M a
 
 
-// flatMap :: # M a -> (a -> M b) -> M b
+  // flatMap :: # M a -> (a -> M b) -> M b
 
 
-// map :: # M a -> (a -> b) -> M b
-;
+  // map :: # M a -> (a -> b) -> M b
+
+
+  return Monad;
+}(_base2.default);
 
 exports.default = Monad;
 
@@ -8354,6 +8372,33 @@ var Some = exports.Some = function (_Option2) {
 
   return Some;
 }(Option);
+
+/***/ }),
+/* 301 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Base = function Base() {
+  var _this = this;
+
+  _classCallCheck(this, Base);
+
+  this.equals = function (x) {
+    return _this.toString() === x.toString();
+  };
+}
+// equals :: # M a -> M a -> boolean
+;
+
+exports.default = Base;
 
 /***/ })
 /******/ ]);
