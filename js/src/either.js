@@ -8,10 +8,11 @@ export class Either extends Monad {
 
   // flatMap :: # M a -> (a -> M b) -> M b
   flatMap = f => 
-    this.constructor.name === 'Left' ? 
+    this.isLeft() ? 
     this : 
     f(this.value)
 
+  isLeft = () => this.constructor.name === 'Left'
 }
 
 export class Left extends Either {
