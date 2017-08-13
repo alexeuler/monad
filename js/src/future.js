@@ -1,43 +1,42 @@
 import Monad from './monad';
 import { Either, Left, Right } from './either';
+import { none, Some } from './option';
 
 export class Future extends Monad {
   // constructor :: ((Either err a -> void) -> void) -> Future (Either err a)
   constructor(f) {
     super();
-    this.pending = [];
-    this.resolved = false;
-    this.value = undefined;
-    f(this.resolve)
+    this.subscribers = [];
+    this.cache = none;
+    f(this.callback)
   }
 
-  resolve = (value) => {
-    this.resolved = true
-    this.value = value
-    this.pending.map(cb => cb(value))
-  }
-
-  addCallback = (callback) => {
-    if (this.resolved) {
-      callback(this.value);
-      return;
+  // callback :: Either err a -> void
+  callback = (value) => {
+    this.cache = new Some(value)
+    debugger;
+    while (this.subscribers.length) {
+      const subscriber = this.subscriber.shift();
+      subscriber(value)
     }
-    this.pending.push(callback)
   }
+
+  // subscribe :: (Either err a -> void) -> void
+  subscribe = (subscriber) => 
+    (this.cache === none ? this.subscribers.push(subscriber) : subscriber(this.cache.value))
 
   toPromise = () => new Promise(
     (resolve, reject) =>
-      // this.addCallback(val => val.isLeft() ? reject(val.value) : resolve(val.value))
-      this.addCallback(resolve)
+      this.subscribe(val => val.isLeft() ? reject(val.value) : resolve(val.value))
   )
 
   // pure :: a -> Future a
   pure = Future.pure
 
-  // flatMap :: # Future a -> (a -> Future b) -> Future b
+  // flatMap :: (a -> Future b) -> Future b
   flatMap = f =>
     new Future(
-      cb => this.addCallback(value => value.isLeft() ? cb(value) : f(value.value).addCallback(cb))
+      cb => this.subscribe(value => value.isLeft() ? cb(value) : f(value.value).subscribe(cb))
     )
 }
 

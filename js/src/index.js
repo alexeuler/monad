@@ -1,7 +1,7 @@
 import { Future } from './future';
 import { Either, Left, Right } from './either';
-import { readFile } from 'fs';
-import https from 'https';
+// import { readFile } from 'fs';
+// import https from 'https';
 
 // const f1 = Future.pure(12)
 // f1.map(console.log)
@@ -34,9 +34,17 @@ const getUrl = url =>
 
 // const readFile = file => Future.fromNode(readFile, file)
 
-Future
-  .fromNode(readFile, 'resources/urls.txt')
-  .map(x => x.toString().split("\n"))
-  .map(console.log)
+// Future
+//   .fromNode(readFile, 'resources/urls.txt')
+//   .map(x => x.toString().split("\n"))
+//   .map(console.log)
 
-https.get("https://google.com", (...args) => console.log(args))
+// https.get("https://google.com", (...args) => console.log(args))
+
+const success = (x, cb) => cb(null, x)
+// const fail = (err, cb) => cb(err, null)
+// return Promise.all([
+//   Future.fromNode(success, 'OK').map(x => expect(x).toBe('OK')).toPromise(),
+//   Future.fromNode(fail, 'FAIL').map(x => expect(x).toBe('FAIL')).toPromise()
+// ]).catch()
+Future.fromNode(success, 'OK').map(x => x).toPromise().then(console.log);

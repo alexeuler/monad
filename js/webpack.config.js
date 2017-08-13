@@ -21,6 +21,6 @@ module.exports = {
       },
     ],
   },
-  watch: true,
-  target: 'node'
+  watch: true
+  // target: 'node'
 };
