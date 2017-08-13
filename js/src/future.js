@@ -16,7 +16,7 @@ export class Future extends Monad {
     this.cache = new Some(value)
     debugger;
     while (this.subscribers.length) {
-      const subscriber = this.subscriber.shift();
+      const subscriber = this.subscribers.shift();
       subscriber(value)
     }
   }
@@ -53,16 +53,4 @@ Future.traverse = list => f =>
     (acc, elem) => acc.flatMap(values => f(elem).map(value => [...values, value])), 
     Future.pure([])
   )
-// new Future(cb => {
-//   let future = Future.pure()
-//   list.forEach(value => {
-//     future = future.flatMap(() => f(value)) 
-//   })
-//   list.map(f)
-//   let waiting = list.length
-//   const dec = () => { 
-//     waiting -= 1
-//     if (waiting === 0) cb(futures.map(future => future.value))
-//   }
-//   const futures = list.map(x => f(x).map(dec)) 
-// })
+

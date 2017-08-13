@@ -2,11 +2,6 @@ import { Future } from '../src/future';
 import { Either, Left, Right } from '../src/either';
 import https from 'https';
 
-// const get = cb => https.get('https://encrypted.google.com/', (err, res) => {
-  
-//   console.log('statusCode:', res.statusCode);
-//   console.log('headers:', res.headers);
-// }
 describe('Future', () => {
   describe('pure', () => {
     it('creates immediately executed function', () => {
