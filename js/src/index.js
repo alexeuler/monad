@@ -32,11 +32,11 @@ const getUrl = url =>
     res.on('error', err => cb(new Left(err)))
   }))
 
-const readFile = file => Future.fromNode(readFile, file)
+// const readFile = file => Future.fromNode(readFile, file)
 
 Future
   .fromNode(readFile, 'resources/urls.txt')
   .map(x => x.toString().split("\n"))
   .map(console.log)
 
-get("https://google.com").map(console.log)
+https.get("https://google.com", (...args) => console.log(args))

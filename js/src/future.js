@@ -1,5 +1,5 @@
 import Monad from './monad';
-import { Either, Left, Right } from './Either';
+import { Either, Left, Right } from './either';
 
 export class Future extends Monad {
   // constructor :: ((Either err a -> void) -> void) -> Future (Either err a)
@@ -27,7 +27,8 @@ export class Future extends Monad {
 
   toPromise = () => new Promise(
     (resolve, reject) =>
-      this.addCallback(val => val.isLeft() ? reject(val.value) : resolve(val.value))
+      // this.addCallback(val => val.isLeft() ? reject(val.value) : resolve(val.value))
+      this.addCallback(resolve)
   )
 
   // pure :: a -> Future a

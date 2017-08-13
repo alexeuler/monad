@@ -1,4 +1,5 @@
 import { Future } from '../src/future';
+import { Either, Left, Right } from '../src/either';
 import https from 'https';
 
 // const get = cb => https.get('https://encrypted.google.com/', (err, res) => {
@@ -15,10 +16,13 @@ describe('Future', () => {
 
   describe('fromNode', () => {
     it('wraps node funtion into future', () => {
-      return Future
-        .fromNode(https.get, 'https://google.com/')
-        .toPromise()
-        .then(x => expect(x).toBe(20))
+      const success = (x, cb) => cb(null, x)
+      const fail = (err, cb) => cb(err, null)
+      // return Promise.all([
+      //   Future.fromNode(success, 'OK').map(x => expect(x).toBe('OK')).toPromise(),
+      //   Future.fromNode(fail, 'FAIL').map(x => expect(x).toBe('FAIL')).toPromise()
+      // ]).catch()
+      return Future.fromNode(success, 'OK').map(x => expect(x).toBe('OK')).toPromise();
     });
   });
 });
