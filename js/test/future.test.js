@@ -26,4 +26,10 @@ describe('Future', () => {
       return Future.fromNode(fail, 'FAIL').map(x => x).toPromise().catch(e => expect(e).toBe('FAIL'));
     });
   });
+
+  describe('traverse', () => {
+    it('traverses list of futures', () => {
+      Future.traverse([1, 2, 3])(x => Future.pure(x)).toPromise().then(list => expect(list).toEqual([1,2,3]))
+    })
+  })
 });

@@ -48,11 +48,21 @@ Future.fromNode = (nodeFunction, ...args) => {
 
 Future.pure = value => new Future(cb => cb(Either.pure(value)))
 
-Future.traverse = list => f => new Future(cb => {
-  let waiting = list.length
-  const dec = () => { 
-    waiting -= 1
-    if (waiting === 0) cb(futures.map(future => future.value))
-  }
-  const futures = list.map(x => f(x).map(dec)) 
-})
+Future.traverse = list => f =>
+  list.reduce(
+    (acc, elem) => acc.flatMap(values => f(elem).map(value => [...values, value])), 
+    Future.pure([])
+  )
+// new Future(cb => {
+//   let future = Future.pure()
+//   list.forEach(value => {
+//     future = future.flatMap(() => f(value)) 
+//   })
+//   list.map(f)
+//   let waiting = list.length
+//   const dec = () => { 
+//     waiting -= 1
+//     if (waiting === 0) cb(futures.map(future => future.value))
+//   }
+//   const futures = list.map(x => f(x).map(dec)) 
+// })
