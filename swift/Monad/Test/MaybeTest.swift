@@ -9,15 +9,6 @@
 import XCTest
 
 class MaybeTest: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testPure() {
       switch Maybe<Any>.pure(123) {
       case .None:
