@@ -14,7 +14,6 @@ export class Future extends Monad {
   // callback :: Either err a -> void
   callback = (value) => {
     this.cache = new Some(value)
-    debugger;
     while (this.subscribers.length) {
       const subscriber = this.subscribers.shift();
       subscriber(value)
