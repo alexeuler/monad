@@ -40,4 +40,13 @@ class FutureTest: XCTestCase {
       return value + 123
     }
   }
+  
+  func testTraverse() {
+    let _ = Future<Error, Int>.traverse([1, 2, 3]) { (value: Int) -> Future<Error, Int> in
+      return Future<Error, Int>.pure(value)
+    }.map { (arr: Array<Int>) -> Array<Int> in
+      XCTAssert(arr == [1, 2, 3])
+      return arr
+    }
+  }
 }

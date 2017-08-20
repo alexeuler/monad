@@ -60,4 +60,14 @@ class Future<Err, A> {
       return Future<Err, B>.pure(f(x))
     })
   }
+  
+  static func traverse<B>(_ list: Array<A>, _ f: @escaping (A) -> Future<Err, B>) -> Future<Err, Array<B>> {
+    return list.reduce(Future<Err, Array<B>>.pure(Array<B>())) { (acc: Future<Err, Array<B>>, elem: A) -> Future<Err, Array<B>> in
+      return acc.flatMap({ (elems: Array<B>) -> Future<Err, Array<B>> in
+        return f(elem).map({ (val: B) -> Array<B> in
+          return elems + [val]
+        })
+      })
+    }
+  }
 }
