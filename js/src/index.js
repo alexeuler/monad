@@ -11,7 +11,7 @@ const getResponse = url =>
     res.on('error', err => cb(new Left(err)))
   }))
 
-const getShortResponse = url => getResponse(url).map(resp => resp.substring(0,200))
+const getShortResponse = url => getResponse(url).map(resp => resp.substring(0, 200))
 
 Future
   .fromNode(readFile, 'resources/urls.txt')

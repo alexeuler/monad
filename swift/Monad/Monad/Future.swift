@@ -13,11 +13,10 @@ class Future<Err, A> {
   
   var subscribers: Array<Callback> = Array<Callback>()
   var cache: Maybe<Either<Err, A>> = .None
-  lazy var callback: Callback = {[weak self](value: Either<Err, A>) in
-    guard let this = self else { return }
-    this.cache = .Some(value)
-    while (this.subscribers.count > 0) {
-      let subscriber = this.subscribers.popLast()
+  lazy var callback: Callback = {(value: Either<Err, A>) in
+    self.cache = .Some(value)
+    while (self.subscribers.count > 0) {
+      let subscriber = self.subscribers.popLast()
       subscriber?(value)
     }
   }

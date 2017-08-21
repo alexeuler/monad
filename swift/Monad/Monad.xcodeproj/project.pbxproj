@@ -22,8 +22,8 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		FA4FE4EE1F42B24B00050266 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1;
 			dstSubfolderSpec = 0;
 			files = (
 			);
@@ -42,6 +42,8 @@
 		FA4FE5131F431D8900050266 /* EitherTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EitherTest.swift; sourceTree = "<group>"; };
 		FAED2FBB1F4A055A00CE52ED /* Future.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Future.swift; sourceTree = "<group>"; };
 		FAED2FBE1F4A12F300CE52ED /* FutureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FutureTest.swift; path = Test/FutureTest.swift; sourceTree = SOURCE_ROOT; };
+		FAED2FC31F4A900F00CE52ED /* urls.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = urls.txt; path = Resources/urls.txt; sourceTree = "<group>"; };
+		FAED2FC51F4A914800CE52ED /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 		FA4FE4E71F42B24B00050266 = {
 			isa = PBXGroup;
 			children = (
+				FAED2FC11F4A8CC900CE52ED /* Resources */,
 				FA4FE4F21F42B24B00050266 /* Monad */,
 				FA4FE5051F430F2B00050266 /* Test */,
 				FA4FE4F11F42B24B00050266 /* Products */,
@@ -87,6 +90,7 @@
 				FA4FE4FA1F42B29400050266 /* Maybe.swift */,
 				FA4FE5101F43173F00050266 /* Either.swift */,
 				FAED2FBB1F4A055A00CE52ED /* Future.swift */,
+				FAED2FC51F4A914800CE52ED /* BridgingHeader.h */,
 			);
 			path = Monad;
 			sourceTree = "<group>";
@@ -100,6 +104,14 @@
 				FA4FE5131F431D8900050266 /* EitherTest.swift */,
 			);
 			path = Test;
+			sourceTree = "<group>";
+		};
+		FAED2FC11F4A8CC900CE52ED /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FAED2FC31F4A900F00CE52ED /* urls.txt */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,6 +307,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -311,7 +324,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = FFVHVU5ZLX;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"PROJECT_DIR=@\\\"$PROJECT_DIR\\\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = Monad/BridgingHeader.h;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -320,7 +338,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = FFVHVU5ZLX;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = Monad/BridgingHeader.h;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
