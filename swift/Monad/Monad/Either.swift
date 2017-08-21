@@ -25,8 +25,6 @@ enum Either<A, B> {
   }
   
   func map<C>(f: (B) -> C) -> Either<A, C> {
-    return self.flatMap({ (x: B) -> Either<A, C> in
-      return Either<A, C>.pure(f(x))
-    })
+    return self.flatMap { Either<A, C>.pure(f($0)) }
   }
 }

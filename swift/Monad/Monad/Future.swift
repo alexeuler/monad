@@ -13,7 +13,7 @@ class Future<Err, A> {
   
   var subscribers: Array<Callback> = Array<Callback>()
   var cache: Maybe<Either<Err, A>> = .None
-  lazy var callback: Callback = {(value: Either<Err, A>) in
+  lazy var callback: Callback = { value in
     self.cache = .Some(value)
     while (self.subscribers.count > 0) {
       let subscriber = self.subscribers.popLast()
@@ -35,38 +35,34 @@ class Future<Err, A> {
   }
   
   static func pure<B>(_ value: B) -> Future<Err, B> {
-    return Future<Err, B>({(callback: (Either<Err, B>) -> Void) in
-      callback(Either<Err, B>.pure(value))
-    })
+    return Future<Err, B> { $0(Either<Err, B>.pure(value)) }
   }
   
   func flatMap<B>(_ f: @escaping (A) -> Future<Err, B>) -> Future<Err, B> {
-    return Future<Err, B>({[weak self](callback: @escaping (Either<Err, B>) -> Void) in
+    return Future<Err, B> { [weak self] callback in
       guard let this = self else { return }
-      this.subscribe({ (value: Either<Err, A>) in
+      this.subscribe { value in
         switch value {
         case .Left(let err):
           callback(Either<Err, B>.Left(err))
         case .Right(let x):
           f(x).subscribe(callback)
         }
-      })
-    })
+      }
+    }
   }
   
   func map<B>(_ f: @escaping (A) -> B) -> Future<Err, B> {
-    return self.flatMap({ (x: A) -> Future<Err, B> in
-      return Future<Err, B>.pure(f(x))
-    })
+    return self.flatMap { Future<Err, B>.pure(f($0)) }
   }
   
   static func traverse<B>(_ list: Array<A>, _ f: @escaping (A) -> Future<Err, B>) -> Future<Err, Array<B>> {
-    return list.reduce(Future<Err, Array<B>>.pure(Array<B>())) { (acc: Future<Err, Array<B>>, elem: A) -> Future<Err, Array<B>> in
-      return acc.flatMap({ (elems: Array<B>) -> Future<Err, Array<B>> in
-        return f(elem).map({ (val: B) -> Array<B> in
+    return list.reduce(Future<Err, Array<B>>.pure(Array<B>())) { (acc: Future<Err, Array<B>>, elem: A) in
+      return acc.flatMap { elems in
+        return f(elem).map { val in
           return elems + [val]
-        })
-      })
+        }
+      }
     }
   }
 }

@@ -26,9 +26,7 @@ enum Maybe<A> {
   }
   
   func map<B>(f: (A) -> B) -> Maybe<B> {
-    return self.flatMap({ (x: A) -> Maybe<B> in
-      return type(of: self).pure(f(x))
-    })
+    return self.flatMap { type(of: self).pure(f($0)) }
   }
 }
 
