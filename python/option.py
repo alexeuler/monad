@@ -1,7 +1,8 @@
 from monad import Monad
 
 class Option(Monad):
-  def pure(self, x):
+  @staticmethod
+  def pure(x):
     return Some(x)
 
   def flat_map(self, f):
@@ -27,3 +28,4 @@ nil = Nil()
 # print(Some(1).flat_map(lambda x: nil).value)
 # print(Some(1).flat_map(lambda x: Some(x + 3)).value)
 # print(nil.map(lambda x: x + 1).defined)
+# print(Option.pure(1).map(lambda x: x + 1).value)
