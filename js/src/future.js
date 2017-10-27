@@ -47,6 +47,7 @@ Future.fromNode = (nodeFunction, ...args) => {
 
 Future.pure = value => new Future(cb => cb(Either.pure(value)))
 
+// traverse :: [a] -> (a -> Future b) -> Future [b]
 Future.traverse = list => f =>
   list.reduce(
     (acc, elem) => acc.flatMap(values => f(elem).map(value => [...values, value])), 

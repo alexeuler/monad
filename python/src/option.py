@@ -1,10 +1,12 @@
 from monad import Monad
 
 class Option(Monad):
+  # pure :: a -> Option a
   @staticmethod
   def pure(x):
     return Some(x)
 
+  # flatMap :: # Option a -> (a -> Option b) -> Option b
   def flat_map(self, f):
     if self.defined:
       return f(self.value)
@@ -23,9 +25,3 @@ class Nil(Option):
     self.defined = False
 
 nil = Nil()
-
-# print(Some(1).map(lambda x: x + 1).value)
-# print(Some(1).flat_map(lambda x: nil).value)
-# print(Some(1).flat_map(lambda x: Some(x + 3)).value)
-# print(nil.map(lambda x: x + 1).defined)
-# print(Option.pure(1).map(lambda x: x + 1).value)

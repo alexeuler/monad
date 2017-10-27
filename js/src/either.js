@@ -1,12 +1,12 @@
 import Monad from './monad';
 
 export class Either extends Monad {
-  // pure :: a -> M a
+  // pure :: a -> Either a
   pure = (value) => {
     return new Right(value)
   }
 
-  // flatMap :: # M a -> (a -> M b) -> M b
+  // flatMap :: # Either a -> (a -> Either b) -> Either b
   flatMap = f => 
     this.isLeft() ? 
     this : 

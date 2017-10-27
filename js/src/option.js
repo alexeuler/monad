@@ -1,7 +1,7 @@
 import Monad from './monad';
 
 export class Option extends Monad {
-  // pure :: a -> M a
+  // pure :: a -> Option a
   pure = (value) => {
     if ((value === null) || (value === undefined)) {
       return none;
@@ -9,7 +9,7 @@ export class Option extends Monad {
     return new Some(value)
   }
 
-  // flatMap :: # M a -> (a -> M b) -> M b
+  // flatMap :: # Option a -> (a -> Option b) -> Option b
   flatMap = f => 
     this.constructor.name === 'None' ? 
     none : 
