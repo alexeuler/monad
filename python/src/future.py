@@ -1,7 +1,8 @@
 from monad import Monad
 from option import nil, Some
-from either import Either
+from either import Either, Left, Right
 from functools import reduce
+import threading
 
 class Future(Monad):
   # __init__ :: ((Either err a -> void) -> void) -> Future (Either err a)
@@ -14,6 +15,20 @@ class Future(Monad):
   @staticmethod
   def pure(value):
     return Future(lambda cb: cb(Either.pure(value)))
+
+  def exec(f, cb):
+    try:
+      data = f()
+      cb(Right(data))
+    except Exception as err:
+      cb(Left(err))
+
+  def exec_on_thread(f, cb):
+    t = threading.Thread(target=Future.exec, args=[f, cb])
+    t.start()
+
+  def async(f):
+    return Future(lambda cb: Future.exec_on_thread(f, cb))
 
   # flat_map :: (a -> Future b) -> Future b
   def flat_map(self, f):
