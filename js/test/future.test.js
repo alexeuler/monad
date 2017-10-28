@@ -9,15 +9,15 @@ describe('Future', () => {
     });
   });
 
-  describe('fromNode', () => {
+  describe('async', () => {
     it('wraps node funtion into future', () => {
       const success = (x, cb) => cb(null, x)
-      return Future.fromNode(success, 'OK').map(x => expect(x).toBe('OK')).toPromise();
+      return Future.async(success, 'OK').map(x => expect(x).toBe('OK')).toPromise();
     });
 
     it('returns failed promise if node function fails', () => {
       const fail = (err, cb) => cb(err, null)
-      return Future.fromNode(fail, 'FAIL').map(x => x).toPromise().catch(e => expect(e).toBe('FAIL'));
+      return Future.async(fail, 'FAIL').map(x => x).toPromise().catch(e => expect(e).toBe('FAIL'));
     });
   });
 

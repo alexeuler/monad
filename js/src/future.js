@@ -39,7 +39,7 @@ export class Future extends Monad {
     )
 }
 
-Future.fromNode = (nodeFunction, ...args) => {
+Future.async = (nodeFunction, ...args) => {
   return new Future(cb => 
     nodeFunction(...args, (err, data) => err ? cb(new Left(err)) : cb(new Right(data)))
   );

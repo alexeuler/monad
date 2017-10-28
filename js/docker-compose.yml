@@ -1,0 +1,8 @@
+version: '3'
+services:
+  app:
+    image: node
+    working_dir: /app
+    command: ["bash"]
+    volumes:
+      - .:/app

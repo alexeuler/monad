@@ -14,7 +14,7 @@ const getResponse = url =>
 const getShortResponse = url => getResponse(url).map(resp => resp.substring(0, 200))
 
 Future
-  .fromNode(readFile, 'resources/urls.txt')
+  .async(readFile, 'resources/urls.txt')
   .map(data => data.toString().split("\n"))
   .flatMap(urls => Future.traverse(urls)(getShortResponse))
   .map(console.log)
