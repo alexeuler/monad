@@ -1,6 +1,7 @@
 class Monad:
   # pure :: a -> M a
-  def pure(self, x):
+  @staticmethod
+  def pure(x):
     raise Exception("pure method needs to be implemented")
   
   # flat_map :: # M a -> (a -> M b) -> M b
