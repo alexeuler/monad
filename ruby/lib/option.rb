@@ -1,4 +1,4 @@
-require './monad'
+require_relative './monad'
 
 class Option < Monad
 

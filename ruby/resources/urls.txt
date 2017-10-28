@@ -1,5 +1,5 @@
-/wiki/JavaScript
-/wiki/Ruby_(programming_language)
-/wiki/Python_(programming_language)
-/wiki/Swift_(programming_language)
-/wiki/Scala_(programming_language)
+https://en.wikipedia.org/wiki/JavaScript
+https://en.wikipedia.org/wiki/Ruby_(programming_language)
+https://en.wikipedia.org/wiki/Python_(programming_language)
+https://en.wikipedia.org/wiki/Swift_(programming_language)
+https://en.wikipedia.org/wiki/Scala_(programming_language)
