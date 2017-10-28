@@ -6,7 +6,7 @@ class Option(Monad):
   def pure(x):
     return Some(x)
 
-  # flatMap :: # Option a -> (a -> Option b) -> Option b
+  # flat_map :: # Option a -> (a -> Option b) -> Option b
   def flat_map(self, f):
     if self.defined:
       return f(self.value)

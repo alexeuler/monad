@@ -6,7 +6,7 @@ class Either(Monad):
   def pure(value):
     return Right(value)
 
-  # flatMap :: # Either a -> (a -> Either b) -> Either b
+  # flat_map :: # Either a -> (a -> Either b) -> Either b
   def flat_map(self, f):
     if self.is_left:
       return self

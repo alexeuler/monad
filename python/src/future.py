@@ -15,7 +15,7 @@ class Future(Monad):
   def pure(value):
     return Future(lambda cb: cb(Either.pure(value)))
 
-  # flatMap :: (a -> Future b) -> Future b
+  # flat_map :: (a -> Future b) -> Future b
   def flat_map(self, f):
     return Future(
       lambda cb: self.subscribe(
