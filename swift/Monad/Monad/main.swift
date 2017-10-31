@@ -12,10 +12,6 @@ enum Err: Error {
   case Some(String)
 }
 
-let background = DispatchQueue(label: "background", attributes: .concurrent)
-let main = DispatchQueue.main
-let semaphore = DispatchSemaphore(value: 0)
-
 func readFile(_ path: String) -> Future<Error, String> {
   return Future<Error, String> { callback in
     background.async {
@@ -64,9 +60,7 @@ let _ = readFile("\(projectDir)/Resources/urls.txt")
             return fetchUrl(url)
         }
     }.map { responses in
-        main.async {
-            print("Resp: \(responses)")
-        }
-}
+      print("Resp: \(responses)")
+    }
 
 RunLoop.main.run()

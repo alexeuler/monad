@@ -8,15 +8,18 @@
 
 import Foundation
 
+let background = DispatchQueue(label: "background", attributes: .concurrent)
+
 class Future<Err, A> {
   typealias Callback = (Either<Err, A>) -> Void
   
   var subscribers: Array<Callback> = Array<Callback>()
   var cache: Maybe<Either<Err, A>> = .None
   var semaphore = DispatchSemaphore(value: 1)
+
   lazy var callback: Callback = { value in
-    self.cache = .Some(value)
     self.semaphore.wait()
+    self.cache = .Some(value)
     while (self.subscribers.count > 0) {
       let subscriber = self.subscribers.popLast()
       background.async {
@@ -31,12 +34,13 @@ class Future<Err, A> {
   }
   
   func subscribe(_ cb: @escaping Callback) {
+    self.semaphore.wait()
     switch cache {
     case .None:
-      self.semaphore.wait()
       subscribers.append(cb)
       self.semaphore.signal()
     case .Some(let value):
+      self.semaphore.signal()
       cb(value)
     }
   }
