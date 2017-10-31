@@ -3,12 +3,14 @@ require_relative './either'
 require_relative './option'
 
 class Future < Monad
-  attr_accessor :subscribers, :cache
+  attr_accessor :subscribers, :cache, :semaphore
 
   # initialize :: ((Either err a -> void) -> void) -> Future (Either err a)
   def initialize(f)
     @subscribers = []
     @cache = $none
+    @semaphore = Queue.new
+    @semaphore.push(nil)
     f.call(method(:callback))
   end
 
@@ -58,19 +60,26 @@ class Future < Monad
 
   # callback :: Either err a -> void
   def callback(value)
+    semaphore.pop
     self.cache = Some.new(value)
     while (subscribers.count > 0)
       sub = self.subscribers.shift
-      sub.call(value)
+      Thread.new {
+        sub.call(value)
+      }
     end
+    semaphore.push(nil)
   end
   
   # subscribe :: (Either err a -> void) -> void
   def subscribe(subscriber)
+    semaphore.pop
     if (self.cache.defined)
+      semaphore.push(nil)
       subscriber.call(cache.value)
     else
       self.subscribers.push(subscriber)
+      semaphore.push(nil)
     end
   end
 end
