@@ -5,7 +5,6 @@ import os
 from future import Future
 from either import Either, Left, Right
 
-sema = threading.BoundedSemaphore(1)
 conn = http.client.HTTPSConnection("en.wikipedia.org")
 
 def read_file_sync(uri):
@@ -29,8 +28,8 @@ def main(args=None):
   lines = read_file("../resources/urls.txt").map(lambda res: res.splitlines())
   content = lines.flat_map(lambda urls: Future.traverse(urls)(fetch))
   output = content.map(lambda res: print("\n".join(res)))
-  output.map(lambda res: sema.release())
-  sema.acquire()
+  # output.map(lambda res: sema.release())
+  # sema.acquire()
 
 if __name__ == "__main__":
   main()

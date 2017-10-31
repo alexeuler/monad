@@ -9,6 +9,7 @@ class Future(Monad):
   def __init__(self, f):
     self.subscribers = []
     self.cache = nil
+    self.semaphore = threading.BoundedSemaphore(1)
     f(self.callback)
 
   # pure :: a -> Future a
@@ -49,14 +50,20 @@ class Future(Monad):
 
   # callback :: Either err a -> void
   def callback(self, value):
+    self.semaphore.acquire()
     self.cache = Some(value)
     while (len(self.subscribers) > 0):
       sub = self.subscribers.pop(0)
-      sub(value)
+      t = threading.Thread(target=sub, args=[value])
+      t.start()
+    self.semaphore.release()
   
   # subscribe :: (Either err a -> void) -> void
   def subscribe(self, subscriber):
+    self.semaphore.acquire()
     if (self.cache.defined):
+      self.semaphore.release()
       subscriber(self.cache.value)
     else:
       self.subscribers.append(subscriber)
+      self.semaphore.release()
