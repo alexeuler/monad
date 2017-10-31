@@ -13,24 +13,31 @@ class Future<Err, A> {
   
   var subscribers: Array<Callback> = Array<Callback>()
   var cache: Maybe<Either<Err, A>> = .None
+  var semaphore = DispatchSemaphore(value: 1)
   lazy var callback: Callback = { value in
     self.cache = .Some(value)
+    self.semaphore.wait()
     while (self.subscribers.count > 0) {
       let subscriber = self.subscribers.popLast()
-      subscriber?(value)
+      background.async {
+        subscriber?(value)
+      }
     }
+    self.semaphore.signal()
   }
   
-  init(_ f: (@escaping Callback) -> Void) {
+  init(_ f: @escaping (@escaping Callback) -> Void) {
     f(self.callback)
   }
   
-  func subscribe(_ callback: @escaping Callback) {
+  func subscribe(_ cb: @escaping Callback) {
     switch cache {
     case .None:
-      subscribers.append(callback)
+      self.semaphore.wait()
+      subscribers.append(cb)
+      self.semaphore.signal()
     case .Some(let value):
-      callback(value)
+      cb(value)
     }
   }
   
@@ -39,14 +46,15 @@ class Future<Err, A> {
   }
   
   func flatMap<B>(_ f: @escaping (A) -> Future<Err, B>) -> Future<Err, B> {
-    return Future<Err, B> { [weak self] callback in
-      guard let this = self else { return }
+    return Future<Err, B> { [weak self] cb in
+      guard let this = self else { print("TO"); return }
       this.subscribe { value in
         switch value {
         case .Left(let err):
-          callback(Either<Err, B>.Left(err))
+          print(err)
+          cb(Either<Err, B>.Left(err))
         case .Right(let x):
-          f(x).subscribe(callback)
+          f(x).subscribe(cb)
         }
       }
     }

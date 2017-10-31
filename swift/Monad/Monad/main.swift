@@ -12,7 +12,7 @@ enum Err: Error {
   case Some(String)
 }
 
-let background = DispatchQueue.global()
+let background = DispatchQueue(label: "background", attributes: .concurrent)
 let main = DispatchQueue.main
 let semaphore = DispatchSemaphore(value: 0)
 
@@ -47,7 +47,8 @@ func fetchUrl(_ url: String) -> Future<Error, String> {
           callback(Either<Error, String>.Left(Err.Some("Cannot decode response")))
           return
         }
-        callback(Either<Error, String>.pure(result))
+        let index = result.index(result.startIndex, offsetBy: 200)
+        callback(Either<Error, String>.pure(String(result[..<index])))
       }
       task.resume()
     }
@@ -55,22 +56,17 @@ func fetchUrl(_ url: String) -> Future<Error, String> {
 }
 
 var result: Any = ""
-
-let _ = readFile("\(projectDir)/Resources/urls.txt").map { data in
-  return data.components(separatedBy: "\n").filter { $0 != "" }
-}.flatMap { urls in
-  return Future<Error, String>.traverse(urls) { url in
-    return fetchUrl(url)
-  }
-}.map { responses in
-  return responses.map { str in
-    return str.substring(to: str.index(str.startIndex, offsetBy: 200))
-  }
-}.map { responses in
-  result = responses
-  semaphore.signal()
+let _ = readFile("\(projectDir)/Resources/urls.txt")
+    .map { data -> [String] in
+      data.components(separatedBy: "\n").filter { (line: String) in !line.isEmpty }
+    }.flatMap { urls in
+        return Future<Error, String>.traverse(urls) { url in
+            return fetchUrl(url)
+        }
+    }.map { responses in
+        main.async {
+            print("Resp: \(responses)")
+        }
 }
 
-
-semaphore.wait()
-print(result)
+RunLoop.main.run()
