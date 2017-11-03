@@ -1,0 +1,11 @@
+version: '3'
+services:
+  app:
+    image: hseeberger/scala-sbt
+    working_dir: /app
+    command: ["bash"]
+    volumes:
+      - '.:/app'
+      - monad-sbt-cache:/root/.ivy2
+volumes:
+  monad-sbt-cache:
