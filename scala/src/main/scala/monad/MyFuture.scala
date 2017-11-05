@@ -19,17 +19,17 @@ class MyFuture[A] {
     M.map(this)(f)
 
   def callback(value: MyEither[Exception, A]): Unit = {
-    println(value)
     semaphore.acquire
     cache = MySome(value)
     subscribers.foreach { sub =>
-      new Thread {
+      val t = new Thread(
         new Runnable {
           def run: Unit = {
             sub(value)
           }
         }
-      }
+      )
+      t.start
     }
     subscribers = List()
     semaphore.release
@@ -51,7 +51,7 @@ class MyFuture[A] {
 object MyFuture {
   def async[B, C](f: B => C, arg: B): MyFuture[C] =
     new MyFuture[C]({ cb =>
-      new Thread {
+      val t = new Thread(
         new Runnable {
           def run: Unit = {
             try {
@@ -61,7 +61,8 @@ object MyFuture {
             }
           }
         }
-      }
+      )
+      t.start
     })
 
   def traverse[A, B](list: List[A])(f: A => MyFuture[B])(implicit M: Monad[MyFuture]): MyFuture[List[B]] = {

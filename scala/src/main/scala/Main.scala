@@ -22,5 +22,5 @@ object Main extends App {
     semaphore.release
   }
 
-  Thread.sleep(2000)
+  semaphore.acquire
 }
