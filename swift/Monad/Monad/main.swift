@@ -60,7 +60,7 @@ let _ = readFile("\(projectDir)/Resources/urls.txt")
             return fetchUrl(url)
         }
     }.map { responses in
-      print("Resp: \(responses)")
+      print(responses)
     }
 
 RunLoop.main.run()
