@@ -4,7 +4,7 @@
   "description": "Simple monads in js",
   "main": "index.js",
   "scripts": {
-    "go": "node dist/app.js",
+    "start": "webpack && node dist/app.js",
     "build": "webpack",
     "lint": "eslint ./src ./test -c .eslint.yml",
     "test": "jest"
