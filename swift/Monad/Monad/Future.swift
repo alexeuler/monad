@@ -51,11 +51,10 @@ class Future<Err, A> {
   
   func flatMap<B>(_ f: @escaping (A) -> Future<Err, B>) -> Future<Err, B> {
     return Future<Err, B> { [weak self] cb in
-      guard let this = self else { print("TO"); return }
+      guard let this = self else { return }
       this.subscribe { value in
         switch value {
         case .Left(let err):
-          print(err)
           cb(Either<Err, B>.Left(err))
         case .Right(let x):
           f(x).subscribe(cb)

@@ -37,11 +37,3 @@ class Right < Either
     @is_left = false
   end
 end
-
-
-# puts Right.new(1).map(-> (x) { x + 1 }).value
-# puts Right.new(1).map(-> (x) { x + 1 }).is_left
-# puts Left.new(1).map(-> (x) { x + 1 }).value
-# puts Left.new(1).map(-> (x) { x + 1 }).is_left
-# puts Left.new(1).flat_map(-> (x) { Right.new(1000) }).value
-# puts Left.new(1).flat_map(-> (x) { Right.new(1000) }).is_left

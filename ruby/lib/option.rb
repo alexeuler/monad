@@ -38,8 +38,3 @@ class None < Option
 end
 
 $none = None.new()
-
-# puts Some.new(1).map(-> (x) { x + 1 }).value
-# puts Some.new(1).flat_map(-> (x) { Some.new(x + 1) }).value
-# puts Some.new(1).flat_map(-> (x) { $none }).defined
-# puts $none.flat_map(-> (x) { Some.new(3) }).defined
