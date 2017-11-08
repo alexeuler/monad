@@ -12,11 +12,11 @@ class MyFuture[A] {
     f(this.callback _)
   }
 
-  def flatMap[B](f: A => MyFuture[B])(implicit M: Monad[MyFuture]): MyFuture[B] =
-    M.flatMap(this)(f)
+  def flatMap[B](f: A => MyFuture[B]): MyFuture[B] =
+    Monad[MyFuture].flatMap(this)(f)
 
-  def map[B](f: A => B)(implicit M: Monad[MyFuture]): MyFuture[B] =
-    M.map(this)(f)
+  def map[B](f: A => B): MyFuture[B] =
+    Monad[MyFuture].map(this)(f)
 
   def callback(value: MyEither[Exception, A]): Unit = {
     semaphore.acquire
@@ -65,10 +65,10 @@ object MyFuture {
       t.start
     })
 
-  def traverse[A, B](list: List[A])(f: A => MyFuture[B])(implicit M: Monad[MyFuture]): MyFuture[List[B]] = {
-    list.foldRight(M.pure(List[B]())) { (elem, acc) =>
-      M.flatMap(acc) ({ values =>
-        M.map(f(elem)) { value => value :: values }
+  def traverse[A, B](list: List[A])(f: A => MyFuture[B]): MyFuture[List[B]] = {
+    list.foldRight(Monad[MyFuture].pure(List[B]())) { (elem, acc) =>
+      Monad[MyFuture].flatMap(acc) ({ values =>
+        Monad[MyFuture].map(f(elem)) { value => value :: values }
       })
     }
   }
